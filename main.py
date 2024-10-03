@@ -27,11 +27,11 @@
 import random
 from assets import buy_in, place_bet, deck, deck_dict, ace_check, bust_or_blackjack, dealer_reveal
 
-from player import Player 
-
 
 #welcome to the game!
 print("welcome to Black Jack!")
+
+
 
 
 ###########################################################################################
@@ -93,7 +93,7 @@ for player in player_inf:
 ###########################################################################################
 
 
-#below we ser up the bot's hand and the player's hand for the start of a new round
+#below we set up the bot's hand and the player's hand for the start of a new round
 new_round = True
 while new_round == True:
 

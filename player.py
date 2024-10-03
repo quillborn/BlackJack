@@ -3,31 +3,75 @@ class Player:
         self.name = name                # Name of the player
         self.balance = 0.0          # Player's balance (amount of money)
         self.hands = []                 # List to store player's hands (e.g., for card games)
-        self.current_bet = 0            # Current bet amount
+        self.bet = 0            # Current bet amount
         
-    def place_bet(self, amount):
+    def place_bet(self):
         """Places a bet if the amount is less than or equal to the balance."""
-        if amount > self.balance:
-            raise ValueError(f"Bet amount of {amount} exceeds balance.")
-        self.current_bet = amount
-        self.balance -= amount 
+        while True:
+            try:
+                value = float(input(f"Player {self.name} How much would you like to bet this round? $"))
+                if value >self.balance:
+                    print("You do not have enough money to bet that amount. Please bet a lower amount.")
+                else:
+                    self.bet = value
+                    self.balance -= value 
+                    break
+            except:
+                print("invald input")
+        
+
     def add_hand(self, hand):
         """Adds a new hand to the player's hands."""
         self.hands.append(hand)
  
     def win_bet(self, multiplier=1):
         """Player wins the bet, balance increases by the bet amount times the multiplier."""
-        winnings = self.current_bet * multiplier
+        winnings = self.bet * multiplier
         self.balance += winnings
-        self.current_bet = 0  # Reset bet after win
+        self.bet = 0  # Reset bet after win
  
     def lose_bet(self):
         """Player loses the current bet."""
-        self.current_bet = 0  # Reset bet after loss
+        self.bet = 0  # Reset bet after loss
  
     def __str__(self):
         return (f"Player: {self.name}, Balance: {self.balance}, "
-                f"Current Bet: {self.current_bet}, Hands: {self.hands}")
+                f"Current Bet: {self.bet}, Hands: {self.hands}")
+    
+
+
+
+
+#additional funtions relating to player below    
+    
+def buy_in():
+    while True:
+        try:
+            value = float(input("What is the buy in this game? $"))
+            if value < 1:
+                print("Balance must be at least $1.00")
+            else:
+                return value
+        except:
+            print("invald input")
+    
+
+    
+    
+def create_players(num_players):
+    """creates a list of player objects"""
+    players = []
+
+    for i in range (num_players):
+        name = input(f"Enter the name for Player {i + 1}: ")
+        player = Player(name)
+        players.append(player)
+    return players
+
+
+
+
+
  
 # # Example usage
 # player = Player("Alice", 1000)

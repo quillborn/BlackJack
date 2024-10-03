@@ -23,10 +23,10 @@ def buy_in():
 
 
 #Define how much player would like to bet this round.
-def place_bet(balance,player_count):
+def place_bet(balance,player_name):
   while True:
     try:
-      value = float(input(f"Player {player_count} How much would you like to bet this round? $"))
+      value = float(input(f"Player {player_name} How much would you like to bet this round? $"))
       if value > balance:
         print("You do not have enough money to bet that amount. Please bet a lower amount.")
         return place_bet(balance)
@@ -110,4 +110,3 @@ def Deal(player_hands_dictionary,seleted_player_hand):
     # deck.remove(player_selected_card)
     player_hands[selected_player_hand].append(player_selected_card)
 
-dasasdasdasdas
