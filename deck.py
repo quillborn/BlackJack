@@ -9,22 +9,6 @@ class Deck:
               , "J", "Q", "K","A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K",
               ]
         
-        self.card_value = {
-            "A": 11,
-            "2": 2,
-            "3": 3,
-            "4": 4,
-            "5": 5,
-            "6": 6,
-            "7": 7,
-            "8": 8,
-            "9": 9,
-            "10": 10,
-            "J": 10,
-            "Q": 10,
-            "K": 10,
-            }
-        
     def initial_deal(self):
         dealt_cards = []
         for n in range(2):
@@ -33,6 +17,28 @@ class Deck:
             dealt_cards.append(selected_card)
         return dealt_cards
     
+    def card_value(self,card):
+        value = card_dict[card]
+        return value
+
+
+card_dict = {
+    "A": 11,
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+    "10": 10,
+    "J": 10,
+    "Q": 10,
+    "K": 10,
+    }
+
+
 
 
     # def deck_size(self,number_of_decks):
