@@ -39,6 +39,7 @@ class Player:
         return (f"Player: {self.name}, Balance: {self.balance}, "
                 f"Current Bet: {self.bet}, Hands: {self.hands}")
     
+
     
 
 
@@ -66,8 +67,8 @@ def create_players(num_players):
 
     for i in range (num_players):
         name = input(f"Enter the name for Player {i + 1}: ")
-        player = Player(name)
-        players.append(player)
+        i = Player(name)
+        players.append(i)
     return players
 
 

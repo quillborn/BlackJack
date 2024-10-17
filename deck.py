@@ -13,6 +13,7 @@ class Deck:
         dealt_cards = []
         for n in range(2):
             selected_card = random.choice(self.cards)
+            # selected_card = self.cards[0] to check ace check functionality
             self.cards.remove(selected_card)
             dealt_cards.append(selected_card)
         return dealt_cards
@@ -20,6 +21,26 @@ class Deck:
     def card_value(self,card):
         value = card_dict[card]
         return value
+    
+
+
+
+
+def ace_check(selected_hands, selected_hand_value):
+# Iterate through each hand in the player's hands
+    for hand in selected_hands:
+        value = selected_hand_value
+        number_of_aces = hand.count("A")  # Count Aces in the current hand
+
+        # Adjust for Aces while value is over 21 and there are Aces to adjust
+        while value > 21 and number_of_aces > 0:
+            value -= 10
+            number_of_aces -= 1
+            
+    return value  # Return the adjusted value after processing all hands
+    
+    
+
 
 
 card_dict = {

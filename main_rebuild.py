@@ -1,7 +1,7 @@
 from player import Player
 from player import create_players, buy_in
 import random
-from deck import Deck, card_dict
+from deck import Deck, ace_check
 from dealer import Dealer
 
 
@@ -31,10 +31,6 @@ print(player_count) #trouble shooting
 #here we generate a list of player objects based off of our player count
 player_list = create_players(player_count)
 
-for player in player_list: #trouble shooting
-  print(player.name)
-print(player_list)
-
 
 
 
@@ -44,7 +40,15 @@ balance = buy_in()
 for player in player_list:
     player.balance += balance
     print(F"{player.name}: {player.balance}")
-    
+
+
+#here we deal the first two cards
+for player in player_list:
+    hand = deck.initial_deal()
+    player.add_hand(hand)
+
+
+
 
 
 ###########################################################################################
@@ -52,41 +56,38 @@ for player in player_list:
 game_in_progress = True
 while game_in_progress:
 
-
-
-
-
 #set how much each player is betting
     for player in player_list:
        player.place_bet()
 
     for player in player_list:
        print(f"{player.name}: Bet({player.bet}) Remaining balance:{player.balance}")#trouble shooting
-
-
-
-
-
-    for player in player_list:
-        player.add_hand(deck.initial_deal())
+       print (f"{player.name}: {player.hands}")
 
 #here we will add up the players hand value 
 # & must firts set all hand values to 0 to recalculate per loop(hit)
+
     for player in player_list:
-       player.hand_value = 0
-#Calculating hand values   
-    for player in player_list:
+      player.hand_value = 0  # Reset the hand value for each player
       for hand in player.hands:  # Iterate through each hand
           for card in hand:  # Iterate through each card in the hand
-              player.hand_value += deck.card_value(card)
-          
-        
+              player.hand_value += deck.card_value(card)  # Calculate hand value
+              print(player.hand_value)  # Print total hand value after calculating for each player
+              print(player.hands)
+
+# an Ace check must be performed after values are calculated to ensure that if the player has bust
+# but has an ace, that the value of the ace is converted to 1 instead of 11
+    for player in player_list:
+       player.hand_value = ace_check(player.hands, player.hand_value)
+       
+
+#here we display the players hand and the value of said hand       
     for player in player_list:    
         print(f"{player.name}'s Hand: {', '.join(player.hands[0])} ({player.hand_value})")
-        
-"""need to add in dealer's cards & values
-   need to add an ace check into loop to adjust value of ace if over 21
-   need to add split and double down functionality (first turn only)
-"""
 
     break
+        
+"""need to add in dealer's cards & values
+   need to add split and double down functionality (first turn only) may be easiest to add a new player with a simillar name to the original player
+   need to add loop functionality
+"""
