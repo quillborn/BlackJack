@@ -1,3 +1,5 @@
+# we are going to let the deck act as the primary brain for the program and may rework this file to simple be 'BLACKJACK BRAIN'
+
 import random
 
 class Deck:
@@ -17,6 +19,11 @@ class Deck:
             self.cards.remove(selected_card)
             dealt_cards.append(selected_card)
         return dealt_cards
+    
+    def deal(self):
+        selected_card = random.choice(self.cards)
+        self.cards.remove(selected_card)
+        return selected_card
     
     def card_value(self,card):
         value = card_dict[card]
@@ -39,7 +46,13 @@ def ace_check(selected_hands, selected_hand_value):
             
     return value  # Return the adjusted value after processing all hands
     
+def standard_r1(player,deck,hand,player_hand_value):
     
+    print(f"\n{player} would you like to double down, hit, or fold?")
+    standard_r1 = input(f"Your Hand: {', '.join(hand)} ({player_hand_value}) :").lower()
+    if standard_r1[:1] == "h":
+        deal = deck.deal()
+        hand.append(deal)
 
 
 

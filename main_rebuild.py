@@ -1,7 +1,7 @@
 from player import Player
 from player import create_players, buy_in
 import random
-from deck import Deck, ace_check
+from deck import Deck, ace_check, standard_r1
 from dealer import Dealer
 
 
@@ -53,6 +53,7 @@ for player in player_list:
 
 ###########################################################################################
 #round initiated for looping in regards to hitting?
+round = 1
 game_in_progress = True
 while game_in_progress:
 
@@ -84,6 +85,26 @@ while game_in_progress:
 #here we display the players hand and the value of said hand       
     for player in player_list:    
         print(f"{player.name}'s Hand: {', '.join(player.hands[0])} ({player.hand_value})")
+
+
+##########need to add a dealer known hand print statement here
+
+    for player in player_list:
+        if round == 1:
+            for hand in player.hands:
+                standard_r1(player.name,deck,hand,player.hand_value)
+            
+            
+                player.hand_value = 0  # Reset the hand value for each player
+                for hand in player.hands:  # Iterate through each hand
+                    for card in hand:  # Iterate through each card in the hand
+                        player.hand_value += deck.card_value(card)  # Calculate hand value
+                
+                player.hand_value = ace_check(player.hands, player.hand_value)  # ace check
+                print(f"{player.name}'s Hand: {', '.join(hand)} ({player.hand_value})")
+        
+          
+
 
     break
         

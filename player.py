@@ -1,3 +1,5 @@
+
+
 class Player:
     def __init__(self, name):
         self.name = name                # Name of the player
@@ -38,6 +40,13 @@ class Player:
     def __str__(self):
         return (f"Player: {self.name}, Balance: {self.balance}, "
                 f"Current Bet: {self.bet}, Hands: {self.hands}")
+    
+    
+    # def calc_hand_value(self,player_hands, player_hand_value)
+    # player_hand_value = 0  # Reset the hand value for each player
+    # for hand in player_hands:  # Iterate through each hand
+    #     for card in hand:  # Iterate through each card in the hand
+    #         player_hand_value += deck_card_value(card)  # Calculate hand value
     
 
     
