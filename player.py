@@ -1,4 +1,4 @@
-
+from hand import Hand
 
 class Player:
     def __init__(self, name):
@@ -6,7 +6,7 @@ class Player:
         self.balance = 0.0          # Player's balance (amount of money)
         self.hands = []                 # List to store player's hands (e.g., for card games)
         self.bet = 0            # Current bet amount
-        self.hand_value = 0
+        # self.hand_value = 0 (redundant)
         
     def place_bet(self):
         """Places a bet if the amount is less than or equal to the balance."""
@@ -79,6 +79,9 @@ def create_players(num_players):
         i = Player(name)
         players.append(i)
     return players
+
+
+
 
 
 

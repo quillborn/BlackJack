@@ -1,4 +1,4 @@
-# we are going to let the deck act as the primary brain for the program and may rework this file to simple be 'BLACKJACK BRAIN'
+# we are going to let the deck act as the primary brain for the program
 
 import random
 
@@ -45,14 +45,70 @@ def ace_check(selected_hands, selected_hand_value):
             number_of_aces -= 1
             
     return value  # Return the adjusted value after processing all hands
+
+
+
+def bust(player,hand):
+    if hand.hand_value > 21:
+        print(f"{player.name} has bust")
+        return True
+    else:
+        return False
+  
+def handle_hit(player, deck, hand):
+    """Handle the player hitting, receiving a card, and updating the hand."""
+    card = deck.deal()
+    hand.add_card(card, deck)  # Use the add_card method to append and recalculate
+    print(f"{player.name} hits and receives the following: {card}.\nNew Hand: {', '.join(hand.contents)} ({hand.hand_value})")
+
+def handle_double_down(player, deck, hand):
+    """Handle the player doubling bet, receiving a card, and updating the hand."""
+    player.balance -= player.bet
+    player.bet += player.bet
+    card = deck.deal()
+    hand.add_card(card, deck)  # Use the add_card method to append and recalculate
+    print(f"{player.name} doubles down. bet:{player.bet} balance:{player.balance}")
+    print(f"{player.name} receives the following: {card}.\nNew Hand: {', '.join(hand.contents)} ({hand.hand_value})\n")
+    bust(player, hand)
+
+def dhs(player, deck, hand):
+    """Handle the player's decision to double down, hit, or fold on the first round."""
+    print(f"\n{player.name}, would you like to double down, hit, or stand?")
+    action = input(f"Your Hand: {', '.join(hand.contents)} ({hand.hand_value}) : ").lower()
     
-def standard_r1(player,deck,hand,player_hand_value):
-    
-    print(f"\n{player} would you like to double down, hit, or fold?")
-    standard_r1 = input(f"Your Hand: {', '.join(hand)} ({player_hand_value}) :").lower()
-    if standard_r1[:1] == "h":
-        deal = deck.deal()
-        hand.append(deal)
+    if action.startswith("h"):
+        handle_hit(player, deck, hand)
+        hs(player,deck,hand)
+    elif action.startswith("d"):
+        if player.balance < (player.bet * 2):
+            print("You do not have a high enough remaining balance to double down.")
+            hs(player,deck,hand)
+        else:
+            handle_double_down(player, deck, hand)
+    elif action.startswith("s"):
+        # Placeholder for fold logic
+        print(f"{player.name} chooses to fold.")
+    else:
+        print("Invalid choice. Please choose to hit, double down, or fold.")
+
+
+def hs(player, deck, hand):
+    """Handle the player's decision to double down, hit, or fold on the first round."""
+    if not bust(player,hand):
+        print(f"\n{player.name}, would you like to hit or stand?")
+        action = input(f"Your Hand: {', '.join(hand.contents)} ({hand.hand_value}) : ").lower()
+        
+        if action.startswith("h"):
+            handle_hit(player, deck, hand)
+            hs(player, deck, hand)
+        
+        elif action.startswith("s"):
+            # Placeholder for fold logic
+            print(f"{player.name} chooses to fold.")
+        else:
+            print("Invalid choice. Please choose to hit, double down, or fold.")
+    else:
+        print("Action here")
 
 
 
