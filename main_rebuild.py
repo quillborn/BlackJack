@@ -1,6 +1,6 @@
 from player import Player, create_players, buy_in
 import random
-from deck import Deck, ace_check, dhs
+from deck import Deck, dhs, sdhs
 from dealer import Dealer
 from hand import Hand
 
@@ -37,7 +37,7 @@ print(f"All Player's Balance's set to: {player.balance}\n")
 
 # Generate hand objects for players to hold cards
 for player in player_list:
-    player_hand = Hand(player.name)
+    player_hand = Hand(player.name, "1st")
     player.hands.append(player_hand)  # Attach the hand to the player
 
     # Deal two cards to each player
@@ -45,15 +45,14 @@ for player in player_list:
         card = deck.deal()
         player_hand.add_card(card, deck)
 
-#<-------------------------------------------------------- Pick up here. replace initial_deal with deal and a for in range of 2 statement 
-#                                                          we have to replace any instance of player.hand with our hand objects. This allows us to have indivual hands with different contents & values (for split)
+#<-------------------------------------------------------- WE NEED TO FIX ERRORS THAT OCCUR WHEN INCORRECT INPUT IS USED DURING SDHS--NEED TO FIND WAY TO IDENTIFY DIFFERENCE BETWEEN SPLIT HANDS--Need to Fix how hitting after player splits
 
 
 
 
 ###########################################################################################
 #round initiated for looping in regards to hitting?
-round = 1
+round = 1 # with the functions internally calling eachother (recursion), a "round" count may no longer nessecary compared to our original code
 game_in_progress = True
 
 while game_in_progress:
@@ -75,7 +74,14 @@ while game_in_progress:
     if round == 1:
         for player in player_list:
             for hand in player.hands:
-                dhs(player, deck, hand)
+
+                x = hand.contents.count(hand.contents[0])
+                if x ==2:
+                    print("split applicable")
+                    sdhs(player, deck, hand)
+                else:
+                    print("not split applicable")
+                    dhs(player, deck, hand)
 
     # Break the loop here for demonstration purposes; adjust based on game continuation conditions
     break
