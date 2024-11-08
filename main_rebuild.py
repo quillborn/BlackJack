@@ -1,28 +1,36 @@
-from player import Player, create_players, buy_in
-import random
-from deck import Deck, dhs, sdhs
+from player import create_players, buy_in
+from deck import Deck, player_action, evaluation
 from dealer import Dealer
 from hand import Hand
+from art import logo
 
-def calc_hand_value(hand, deck):
-    """Calculate the total value of the hand."""
-    hand.calculate_hand_value(deck)
-    return hand.hand_value
 
+# Final step will involve finalizing shuffle method by collecting a list of all cards currentl in play and removing them from the reinitialized deck
+
+
+print(logo)
 print("Welcome to Black Jack!")
 
-# Generate a deck and a dealer
-deck = Deck()
-dealer = Dealer()
+#Setting cutsom values
+split_tolerance = 2
+max_players = 4
+number_of_decks = 1
+shuffle_rate = 50 # % representation
+
+# Generate a deck & add addittional decks if prompted
+deck = Deck(shuffle_rate, number_of_decks)
+deck.initialize_deck()
+print(deck.cards)
 
 # Prompt for how many players are in the game
 while True:
     try:
-        player_count = int(input("How many players are playing? "))
-        if 1 <= player_count <= 4:
+        player_count = int(input("How many players are playing? (1-4): "))
+        if 1 <= player_count <= max_players:
             break
+        print("Please enter a number between 1 and 4.")
     except ValueError:
-        print("Invalid input, please enter a number between 1 and 4.")
+        print("Invalid input. Please enter a valid number.")
 
 print(f"Player count: {player_count}")
 
@@ -33,60 +41,82 @@ player_list = create_players(player_count)
 balance = buy_in()
 for player in player_list:
     player.balance += balance
+    player.remaining_balance += balance
 print(f"All Player's Balance's set to: {player.balance}\n")
 
-# Generate hand objects for players to hold cards
-for player in player_list:
-    player_hand = Hand(player.name, "1st")
-    player.hands.append(player_hand)  # Attach the hand to the player
-
-    # Deal two cards to each player
-    for _ in range(2):
-        card = deck.deal()
-        player_hand.add_card(card, deck)
-
-#<-------------------------------------------------------- WE NEED TO FIX ERRORS THAT OCCUR WHEN INCORRECT INPUT IS USED DURING SDHS--NEED TO FIND WAY TO IDENTIFY DIFFERENCE BETWEEN SPLIT HANDS--Need to Fix how hitting after player splits
-
-
-
-
-###########################################################################################
+###################################################
 #round initiated for looping in regards to hitting?
-round = 1 # with the functions internally calling eachother (recursion), a "round" count may no longer nessecary compared to our original code
-game_in_progress = True
 
-while game_in_progress:
+while True:
 
+    #filter our any player that have hit a balance of 0 and lost
+    player_list = [player for player in player_list if player.balance > 0]
+
+    # Check if all players have been removed
+    if not player_list:
+        print("All players are out of balance. Game over.")
+        exit()
+
+    # Generate hand objects for players to hold cards
+    for player in player_list:
+        player_hand = Hand(player.name)
+        player.hands.append(player_hand)  # Attach the hand to the player
+
+        # Deal two cards to each player
+        for _ in range(2):
+            card = deck.deal()
+            player_hand.add_card(card, deck)
+
+    #generate our dealer object alongside their hand & cards
+    dealer_hand = Hand("Dealer")  # Generates Dealer hand object
+    for x in range(2):
+        card = deck.deal()
+        dealer_hand.add_card(card, deck)
+    dealer = Dealer(dealer_hand)    # Dealer generated second in order to use hand object in innit
+    
     # Set each player's bet for the round
     for player in player_list:
         player.place_bet()
-        print(f"{player.name}: Bet({player.bet}) Remaining balance: {player.balance}\n")
+        print(f"{player.name}: Bet({player.bet}) Remaining balance: {player.remaining_balance}\n")
 
-    # Display each player's hand with its total value after Ace adjustment
+    # Display the dealer's hand. Players hand's are revealed one at a time for visual clarity
     print("Hands Dealt...")
+    dealer_hand.display_dealer_hand(deck)
+
+    #Decide what actions the player can take and presents them
     for player in player_list:
         for hand in player.hands:
-            hand.display_hand()
+            player_action(player, deck, hand,split_tolerance)
+            
+    #Dealer Draws until they have a hand value of 17 or greater and then reveals hand
+    deck.deal17(dealer_hand)
+    dealer_hand.display_hand()
 
-    # Dealer's known hand print statement here (to be implemented)
+    for player in player_list:
+        for hand in player.hands:
+            evaluation(player,hand,dealer_hand)
 
-    # Special handling for the first round of play
-    if round == 1:
-        for player in player_list:
-            for hand in player.hands:
+    #filter our any player that have hit a balance of 0 and lost
+    player_list = [player for player in player_list if player.balance > 0]
 
-                x = hand.contents.count(hand.contents[0])
-                if x ==2:
-                    print("split applicable")
-                    sdhs(player, deck, hand)
-                else:
-                    print("not split applicable")
-                    dhs(player, deck, hand)
+    # Check if all players have been removed
+    if not player_list:
+        print("All players are out of balance. Game over.")
+        exit()
 
-    # Break the loop here for demonstration purposes; adjust based on game continuation conditions
-    break
-        
-"""need to add in dealer's cards & values
-   need to add split and double down functionality (first turn only) may be easiest to add a new player with a simillar name to the original player
-   need to add loop functionality
-"""
+    while True:
+        continue_game = input("\nContinue? Y/N: ").strip().lower()
+
+        if continue_game.startswith("y"):
+            for player in player_list:
+                player.reset_player()
+                for hand in player.hands:
+                    hand.reset_hand()
+            break  # Continue to the next game loop iteration
+
+        elif continue_game.startswith("n"):
+            print("Game over. Exiting...")
+            exit()  # Exit the program immediately
+
+        else:
+            print("Invalid input. Please enter 'Y' or 'N'.")

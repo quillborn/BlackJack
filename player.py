@@ -4,20 +4,23 @@ class Player:
     def __init__(self, name):
         self.name = name                # Name of the player
         self.balance = 0.0          # Player's balance (amount of money)
+        self.remaining_balance = 0.0
         self.hands = []                 # List to store player's hands (e.g., for card games)
         self.bet = 0            # Current bet amount
+        self.split_count = 0    # number of time player has split
+
         # self.hand_value = 0 (redundant)
         
     def place_bet(self):
         """Places a bet if the amount is less than or equal to the balance."""
         while True:
             try:
-                value = float(input(f"Player {self.name} How much would you like to bet this round? $"))
+                value = float(input(f"Player {self.name} How much would you like to bet this round?  Balance:{self.balance} $"))
                 if value >self.balance:
                     print("You do not have enough money to bet that amount. Please bet a lower amount.")
                 else:
                     self.bet = value
-                    self.balance -= value 
+                    self.remaining_balance -= value 
                     break
             except:
                 print("invald input")
@@ -27,19 +30,24 @@ class Player:
         """Adds a new hand to the player's hands."""
         self.hands.append(hand)
  
-    def win_bet(self, multiplier=1):
+    def win(self):
         """Player wins the bet, balance increases by the bet amount times the multiplier."""
-        winnings = self.bet * multiplier
-        self.balance += winnings
-        self.bet = 0  # Reset bet after win
- 
-    def lose_bet(self):
+        self.balance += self.bet
+
+    def blackjack(self):
+        """Player wins the bet, balance increases by the bet amount times the multiplier."""
+        self.balance += self.bet 
+
+    def lose(self):
         """Player loses the current bet."""
-        self.bet = 0  # Reset bet after loss
- 
-    def __str__(self):
-        return (f"Player: {self.name}, Balance: {self.balance}, "
-                f"Current Bet: {self.bet}, Hands: {self.hands}")
+        self.balance -= self.bet
+    
+    def reset_player(self):
+        self.hands = []
+        self.bet = 0
+        self.split_count = 0
+        self.remaining_balance = self.balance
+
     
     
     # def calc_hand_value(self,player_hands, player_hand_value)
