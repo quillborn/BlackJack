@@ -3,7 +3,8 @@ class Dealer:
         self.name = "House"                # Name of the player
         self.hands = hand                 # List to store player's hands (e.g., for card games)
 
-
+    def reset_dealer(self):
+        self.hands.contents = []
         
 
             

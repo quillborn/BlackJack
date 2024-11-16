@@ -17,19 +17,16 @@ class Hand:
         self.calculate_hand_value(deck)
 
     def calculate_hand_value(self, deck):
-        from deck import ace_check
+        from BlackJack_Brain import ace_check
         """Calculate the total value of the hand, applying Ace adjustments if necessary."""
         self.hand_value = sum(deck.card_value(card) for card in self.contents)
         self.hand_value = ace_check(self.contents, self.hand_value)  # Apply Ace adjustment
-
-
 
     def name_position_format(self):
         if self.position >= 2 :
             return(f"{self.name}'s hand ({self.position})")
         else: 
             return(f"{self.name}'s hand ({self.position})")
-
 
     def display_hand(self):
         """Display the hand and its total value."""
@@ -44,13 +41,6 @@ class Hand:
                 print(f"\nDealer's hand: {', '.join(displayed_cards)} ({displayed_value})")
             else:
                 print("\nDealer's hand: ??? (Hidden)")
-
-    def reset_hand(self):
-        self.contents = []
-        self.hand_value = 0
-        self.bust = False
-        self.position = 1
-        self.turn = 1
 
 
 

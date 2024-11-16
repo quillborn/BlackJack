@@ -43,25 +43,13 @@ class Player:
         self.balance -= self.bet
     
     def reset_player(self):
-        self.hands = []
-        self.bet = 0
-        self.split_count = 0
-        self.remaining_balance = self.balance
-
+            for hand in self.hands:
+                del hand
+            self.hands = []
+            self.bet = 0
+            self.split_count = 0
+            self.remaining_balance = self.balance
     
-    
-    # def calc_hand_value(self,player_hands, player_hand_value)
-    # player_hand_value = 0  # Reset the hand value for each player
-    # for hand in player_hands:  # Iterate through each hand
-    #     for card in hand:  # Iterate through each card in the hand
-    #         player_hand_value += deck_card_value(card)  # Calculate hand value
-    
-
-    
-
-
-
-
 #additional funtions relating to player below    
     
 def buy_in():
@@ -75,9 +63,6 @@ def buy_in():
         except:
             print("invald input")
     
-
-    
-    
 def create_players(num_players):
     """creates a list of player objects"""
     players = []
@@ -88,14 +73,6 @@ def create_players(num_players):
         players.append(i)
     return players
 
-
-
-
-
-
-
-
- 
 # # Example usage
 # player = Player("Alice", 1000)
 # print(player)
