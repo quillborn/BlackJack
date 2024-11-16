@@ -374,14 +374,26 @@ def hs(player, deck, hand, player_list, dealer):
         else:
             print("Invalid choice. Please enter 'hit' or 'stand'.")
 
-def evaluation(player, hand, dealer_hand):
+def evaluation(player,hand,dealer_hand):
     if hand.hand_value > 21:
         player.lose()
-        print(f"{player.name} bust this round Hand Value:({hand.hand_value}) Player Loses:${player.bet:.2f} Player Balance:${player.balance:.2f}")
+        print(f"{player.name} bust this round Hand Value:({hand.hand_value}) Player Loses:{player.bet} Player Balance:{player.balance}")
     elif hand.hand_value == 21 and dealer_hand.hand_value != 21:
         player.win()
-        print(f"{player.name} hit Blackjack! Hand Value:({hand.hand_value}) Player Wins:${player.bet:.2f} Player Balance:${player.balance:.2f}")
+        print(f"{player.name} hit Blackjack! Hand Value:({hand.hand_value}) Player Wins:{player.bet} Player Balance:{player.balance}")
     elif hand.hand_value == dealer_hand.hand_value:
         if hand.hand_value == 21:
             player.win()
-            print(f"{player.name} hit Blackjack! Hand Value:({hand.hand_value}) Player Wins")
+            print(f"{player.name} hit Blackjack! Hand Value:({hand.hand_value}) Player Wins:{player.bet} Player Balance:{player.balance}")
+        else:
+            print(f"{player.name} has pushed Hand Value:({hand.hand_value}) Player Wins:0.0 Player Balance:{player.balance}")
+    elif hand.hand_value > dealer_hand.hand_value:
+        player.win()
+        print(f"{player.name} wins Hand Value:({hand.hand_value}) Player Wins:{player.bet} Player Balance:{player.balance}")
+    elif hand.hand_value < dealer_hand.hand_value:
+        if dealer_hand.hand_value > 21:
+            player.win()
+            print(f"The dealer has bust, {player.name} wins Hand Value:({hand.hand_value}) Player Wins:{player.bet} Player Balance:{player.balance}")
+        else:
+            player.lose()
+            print(f"{player.name} loses Hand Value:({hand.hand_value}) Player Loses:{player.bet} Player Balance:{player.balance}")
