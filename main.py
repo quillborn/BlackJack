@@ -1,4 +1,4 @@
-from art import logo, TXP
+from art import logo
 from BlackJack_Brain import BlackJack
 
 # Final step will involve finalizing shuffle method by collecting a list of all cards currentl in play and removing them from the reinitialized deck
