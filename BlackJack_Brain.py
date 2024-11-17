@@ -97,7 +97,7 @@ def BlackJack():
     # Prompt for how many players are in the game
     while True:
         try:
-            player_count = int(input("\nHow many players are playing? (1-4): "))
+            player_count = int(input(f"\nHow many players are playing? (1-{max_players}): "))
             if 1 <= player_count <= max_players:
                 break
             print("Please enter a number between 1 and 4.")
